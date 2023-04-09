@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({ extended:true }));
 app.use(fileUpload({useTempFiles: true})); 
 
 
-// use default routes 
+// use default routes cf
 try {
     app.use('', doctors);
     app.use('', users);
