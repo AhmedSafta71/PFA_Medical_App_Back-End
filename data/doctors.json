@@ -1,18 +1,11 @@
 [
     {
-        "Id_Docteur": "1252BVD",
+        "Id_Doctor": "1252BVD",
         "name": "Meriem   ",
         "surname": "DGHIM HAMZAOUI",
-        "ville": "Monastir",
+        "city": "Monastir",
         "address": "Avenue du combattant supreme, Immeuble ghomrassi 4eme etage N1 5000 Monastir Tunisie",
-        "description": [
-            "Ancienne assistante hospitalo-universitaire à l'hôpital militaire et à la faculté de médecine de Tunis",
-            "Certificat D’études Complémentaires En Cardiologie Interventionnelle",
-            "Certificat D’études Complémentaires En Echographie Cardiaque Et Doppler",
-            "Certificat D’études Complémentaires En Cardiologie Pédiatrique",
-            "Certificat D’études Complémentaires En Hypertension Artérielle",
-            "Certificat d’études complémentaires : Exploration Non Invasive Et Imagerie Cardiaque,Diplôme De Master Professionnel De Cardiologie De Sport Et Réadaptation Cardiaque"
-        ],
+        "description": "Ancienne assistante hospitalo-universitaire à l'hôpital militaire et à la faculté de médecine de Tunis - Certificat D’études Complémentaires En Cardiologie Interventionnelle-Certificat D’études Complémentaires En Echographie Cardiaque Et Doppler",
         "soins": [
             "Echographie cardiaque",
             "Electrocardogramme (ECG)",
@@ -21,7 +14,7 @@
             "Holter tentionnel",
             "Holter Rythmique"
         ],
-        "phone": 73427652,
+        "phone": "73427652",
         "email": "dghimmeriem@yahoo.fr",
         "password": "dghimer123456",
         "ratings": 4.5,
@@ -34,16 +27,12 @@
         "reviews": []
     },
     {
-        "Id_Docteur": "1275ABE",
+        "Id_Doctor": "1275ABE",
         "name": "Amine",
         "surname": "HDIJI",
-        "ville": "Sfax",
+        "city": "Sfax",
         "address": "Complexe Médical EL HAKIM rte gremda km 3 1ère étage bloc B Sidi Abbes 3062 Sfax Tunisie",
-        "description": [
-            "Diplôme de Cardiologie Interventionnelle",
-            "Diplôme de Cardiologie Interventionnelle",
-            "Diplôme de Cardiologie du Sport,Diplôme des maladies de la thrombose et de l'hémorragie "
-        ],
+        "description":  "Diplôme de Cardiologie Interventionnelle,Diplôme de Cardiologie Interventionnelle,Diplôme de Cardiologie du Sport,Diplôme des maladies de la thrombose et de l'hémorragie ",
         "soins": [
             "Echographie cardiaque",
             "Electrocardogramme (ECG)",
@@ -52,7 +41,7 @@
             "Holter tentionnel",
             "Holter Rythmique"
         ],
-        "phone": 74427552,
+        "phone": "74427552",
         "email": "aminehdiji@gmail.com",
         "password": "hdiji123456",
         "ratings": 3.6,
@@ -65,15 +54,13 @@
         "reviews": []
     },
     {
-        "Id_Docteur": "1115ABE",
+        "Id_Doctor": "1115ABE",
         "name": "Chedly",
         "surname": "BRAHEM",
-        "ville": "Tunis",
+        "city": "Tunis",
         "address": "Rue de la bourse , à côté clinique la rose Lac 2 Les Berges Du Lac 2 1053 Tunis Tunisie",
-        "description": [
-            "Formation système intra look USA",
-            "Formation Straumann Suisse"
-        ],
+        "description": 
+            "Formation système intra look USA - Formation Straumann Suisse",
         "soins": [
             "Echographie cardiaque",
             "Electrocardogramme (ECG)",
@@ -82,7 +69,7 @@
             "Holter tentionnel",
             "Holter Rythmique"
         ],
-        "phone": 71427652,
+        "phone": "71427652",
         "email": "chedlyBrahem@gmail.com",
         "password": "brahem123456",
         "ratings": 4.8,
@@ -95,24 +82,20 @@
         "reviews": []
     },
     {
-        "Id_Docteur": "11855C",
+        "Id_Doctor": "11855C",
         "name": "Karim",
         "surname": "BAHRI",
-        "ville": "Sousse",
+        "city": "Sousse",
         "address": "Boulvard 14 Janvier, Immeuble Misk Ellil (en face de la Clinique les Oliviers) 3ème Etage B-36 Khzéma Sousse 4051 Khezama Ouest 4071 Sousse Tunisie",
-        "description": [
-            " Esthétique",
-            "extraction chirurgicale",
-            "implantologie",
-            "appareil ortho invisible"
-        ],
+        "description": 
+            " Esthétique,extraction chirurgicale,implantologie,appareil ortho invisible",
         "soins": [
             " Esthétique",
             "extraction chirurgicale",
             "implantologie",
             "appareil ortho invisible"
         ],
-        "phone": 73427652,
+        "phone": "73427652",
         "email": "bahrikarim@gmail.com",
         "password": "bahri123456",
         "ratings": 4.1,
@@ -125,14 +108,12 @@
         "reviews": []
     },
     {
-        "Id_Docteur": "1316SDV",
+        "Id_Doctor": "1316SDV",
         "name": "Yassine ",
         "surname": "BEN ALAYA",
-        "ville": "Tunis",
+        "city": "Tunis",
         "address": "Immeuble n°208, avenue habib bourguiba 4ème étage app.4Le Kram 2015 Tunis Tunisie",
-        "description": [
-            "Chirurgien orthopédiste Traumatologue, "
-        ],
+        "description":   "Chirurgien orthopédiste Traumatologue",
         "soins": [
             "Orthopédie pédiatrique",
             "T(raitement chirurgical de l'hernie discale",
@@ -142,7 +123,7 @@
             "Arthroplastie avec implantation d'une prothèse articulaire( Hanche/Coude/épaule)",
             "Cure du syndrome du canal carpien"
         ],
-        "phone": 74425652,
+        "phone": "74425652",
         "email": "benalayayassine@gmail.com",
         "password": "benAlaya123456",
         "ratings": 4.9,
@@ -155,18 +136,12 @@
         "reviews": []
     },
     {
-        "Id_Docteur": "105612V",
+        "Id_Doctor": "105612V",
         "name": "Mariam",
         "surname": "SAADALLAH RACHEK",
-        "ville": "Tunis",
+        "city": "Tunis",
         "address": "9 avenue Habib bourguiba (dans la rue du café Bellar) ariana 2080 Ariana Ville 2080 Ariana Tunisie",
-        "description": [
-            "Diplômé du Club international de médecine esthétique",
-            "DU des injections esthétiques et réparatrice du visage",
-            "Diplômé en laser esthétique et médical",
-            "Diplômé en geriatrie",
-            "Formation en prise en charge de l HTA "
-        ],
+        "description": "Diplômé du Club international de médecine esthétique,DU des injections esthétiques et réparatrice du visag ,Diplômé en laser esthétique et médical ,Diplômé en geriatrie ,Formation en prise en charge de l HTA ",
         "soins": [
             "Injection anti-inflammatoires non stéroidiens pour douleurs aigues ( Coliques néphrétiques / Lombalgies / douleurs articulaires / Sciatiques)",
             "Mésolift",
@@ -187,14 +162,12 @@
     },
 
     {
-        "Id_Docteur": "15569bV",
+        "Id_Doctor": "15569bV",
         "name": "Kamel",
         "surname": "AROUS",
-        "ville": "Sousse",
+        "city": "Sousse",
         "address": "Avenue Léopold Senghor, Immeuble diagonale Seltène Sousse Ville 4000 Sousse Tunisie",
-        "description": [
-            "Spécialiste en Ophtalmologie Chirurgie des yeux Correction de la vue par Laser Ancien Résident des Hopitaux de Sousse et Tunis Ancien Attaché des hôpitaux de Paris"
-        ],
+        "description": "Spécialiste en Ophtalmologie Chirurgie des yeux Correction de la vue par Laser Ancien Résident des Hopitaux de Sousse et Tunis Ancien Attaché des hôpitaux de Paris",
         "soins": [
             "Chirurgie refractive",
             "Chirurgie filtrante du glaucome chronique",
@@ -202,7 +175,7 @@
             "Traitement de blépharospasme par injection de toxine botulique",
             "Suivi de maladies respiratoires chroniques"
         ],
-        "phone": 73765102,
+        "phone": "73765102",
         "email": "arouskamel@yahoo.fr",
         "password": "arous123456",
         "ratings": 4.5,

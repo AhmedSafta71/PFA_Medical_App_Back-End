@@ -10,33 +10,61 @@ const APIFeatures = require('../utils/apiFeatures');
 
 //get all Doctors  =>/doctors ?keyword=DoctorName
 exports.getDoctors = catchAssyncErrors(async (req, res, next) => {
+
     //total number of doctors 
     const doctorsCount = await Doctor.countDocuments();
-    console.log("DoctorsCount",doctorsCount);
+
     
     //how many Doctors cards to display per page 
     const resPerPage = 6;
     const apiFeatures = new APIFeatures(Doctor.find(), req.query)
-        // .search()
-        // .filter();
-    
+    .search()
+    console.log("the request queryStr to handle is ", apiFeatures.queryStr);
+    console.log("element ", typeof apiFeatures.queryStr.doctorName );
       
+      
+    apiFeatures.pagination(resPerPage)
     let doctors= await apiFeatures.query;
-    console.log("hello , hello");
     let filteredDoctorsCount = doctors.length;
 
-   apiFeatures.pagination(resPerPage);
-   console.log("DoctorsQuerry",doctorsCount);
    
-  doctors = await apiFeatures.query.clone();
- 
         res.status(200).json({
             success: true,
-          // result: `${filteredDoctorsCount} out of ${doctorsCount} doctors found`,
             resPerPage,
             doctors, 
             doctorsCount,
-            filteredDoctorsCount 
+            filteredDoctorsCount, 
+    
         })
         return next(new ErrorHandler('error', 400)); 
+})
+
+//Get Doctor by email address
+exports.getDoctorProfile = catchAssyncErrors(async (req, res, next) => {
+
+    const doctor = await Doctor.find({email:req.query.email}).exec()
+    .catch(err => {
+        console.log(err);
+        res.status(400).json({
+            success: false,
+            message: err
+        })
+    });
+    res.status(200).json({
+        succcess: true,
+        userFile: doctor,
+    })
+})
+//get Doctor by Id   => /doctor/details/:id
+
+exports.getDoctorByID = catchAssyncErrors(async (req, res, next) => {
+     console.log("params ", req.params.id); 
+    const doctor = await Doctor.findById(req.params.id); 
+    if (!doctor) {
+        return next(new ErrorHandler('Product not found', 404));
+    }
+    res.status(200).json({
+        succcess: true,
+        doctor: doctor
+    })
 })

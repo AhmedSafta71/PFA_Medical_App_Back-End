@@ -2,18 +2,42 @@
 
 var express = require('express');
 
+var helmet = require('helmet');
+
+var dotenv = require('dotenv');
+
+var passport = require('passport');
+
+var _require = require('passport-google-oauth20'),
+    Strategy = _require.Strategy;
+
 var https = require('https');
 
 var fs = require('fs');
 
 var fileUpload = require('express-fileupload');
 
-var path = require('path'); //create an express app 
+var path = require('path');
 
+dotenv.config({
+  path: '.env'
+}); //create an express app 
 
 var app = express();
+AUTH_OPTIONS = {
+  callbackURL: '/auth/google/callback',
+  clientID: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET
+};
 
-var dotenv = require('dotenv');
+function verifyCallback(accessToken, refreshToken, profile, done) {
+  console.log('Google profile ', profile);
+  done(null, profile);
+}
+
+passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
+app.use(helmet());
+app.use(passport.initialize());
 
 var errorMiddelware = require('./middlewares/errors');
 
@@ -27,12 +51,15 @@ var cloudinary = require('cloudinary');
 
 var doctors = require('./routes/doctorsRoutes');
 
-var users = require('./routes/userRoutes'); // handle uncaught exceptions 
+var users = require('./routes/userRoutes');
+
+var patients = require('./routes/patientRoutes');
+
+var questions = require('./routes/questionRoutes');
+
+var payments = require('./routes/payementRoute'); // handle uncaught exceptions 
 
 
-dotenv.config({
-  path: '.env'
-});
 process.on('uncaughtException', function (err) {
   console.log("error: ".concat(err.stack));
   console.log("shutting down due to uncaught exceptions ");
@@ -57,6 +84,9 @@ app.use(fileUpload({
 try {
   app.use('', doctors);
   app.use('', users);
+  app.use('', patients);
+  app.use('', questions);
+  app.use('', payments);
 } catch (error) {
   console.log("error ", error);
 } //set up cloudianry 

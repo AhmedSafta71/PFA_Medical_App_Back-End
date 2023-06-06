@@ -1,5 +1,11 @@
 "use strict";
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var User = require('../models/User');
 
 var Doctor = require('../models/Doctor');
@@ -10,7 +16,9 @@ var catchAssyncErrors = require('../middlewares/catchAssyncErrors');
 
 var ErrorHandler = require('../utils/errorHandler');
 
-var sendToken = require('../utils/jwtToken');
+var _require = require('../utils/jwtToken'),
+    sendToken = _require.sendToken,
+    sendDoctorToken = _require.sendDoctorToken;
 
 var sendEmail = require('../utils/sendEmail');
 
@@ -18,7 +26,10 @@ var cloudinary = require('cloudinary');
 
 var path = require('path');
 
-var crypto = require('crypto'); // Local storage data for register
+var crypto = require('crypto');
+
+var _require2 = require('../models/User'),
+    removeListener = _require2.removeListener; // Local storage data for register
 
 
 var storedRegister = {
@@ -121,9 +132,8 @@ exports.captureUser = catchAssyncErrors(function _callee2(req, res) {
             success: true,
             user: storedRegister
           });
-          console.log("success!!");
 
-        case 13:
+        case 12:
         case "end":
           return _context2.stop();
       }
@@ -132,31 +142,20 @@ exports.captureUser = catchAssyncErrors(function _callee2(req, res) {
 }); // registerPatient => register/patient
 
 exports.registerPatient = catchAssyncErrors(function _callee3(req, res) {
-  var _req$body3, name, surname, city, gender, age, smoker, height, weight, disease, operation, userName, email, password, avatar, role, patient, user;
+  var _req$body3, name, surname, city, gender, age, smoker, height, weight, userName, email, password, avatar, disease, operation, role, patient, user;
 
   return regeneratorRuntime.async(function _callee3$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          console.log("the request body", req.body);
-          _req$body3 = req.body, name = _req$body3.name, surname = _req$body3.surname, city = _req$body3.city, gender = _req$body3.gender, age = _req$body3.age, smoker = _req$body3.smoker, height = _req$body3.height, weight = _req$body3.weight, disease = _req$body3.disease, operation = _req$body3.operation;
-          console.log("StoredRegister data  ", storedRegister);
+          console.log("registerPatient request arrived ");
+          _req$body3 = req.body, name = _req$body3.name, surname = _req$body3.surname, city = _req$body3.city, gender = _req$body3.gender, age = _req$body3.age, smoker = _req$body3.smoker, height = _req$body3.height, weight = _req$body3.weight;
+          console.log("StoredRegister data", storedRegister);
           userName = storedRegister.userName, email = storedRegister.email, password = storedRegister.password, avatar = storedRegister.avatar;
+          disease = req.body['disease[]'];
+          operation = req.body['operation[]'];
           role = 'Patient';
-          console.log("Data sent to patient ", {
-            name: name,
-            surname: surname,
-            city: city,
-            gender: gender,
-            age: age,
-            smoker: smoker,
-            height: height,
-            weight: weight,
-            disease: disease,
-            operation: operation,
-            email: email
-          });
-          _context3.next = 8;
+          _context3.next = 9;
           return regeneratorRuntime.awrap(Patient.create({
             name: name,
             surname: surname,
@@ -177,9 +176,9 @@ exports.registerPatient = catchAssyncErrors(function _callee3(req, res) {
             });
           }));
 
-        case 8:
+        case 9:
           patient = _context3.sent;
-          _context3.next = 11;
+          _context3.next = 12;
           return regeneratorRuntime.awrap(User.create({
             userName: userName,
             email: email,
@@ -194,11 +193,11 @@ exports.registerPatient = catchAssyncErrors(function _callee3(req, res) {
             });
           }));
 
-        case 11:
+        case 12:
           user = _context3.sent;
           sendToken(user, 201, res);
 
-        case 13:
+        case 14:
         case "end":
           return _context3.stop();
       }
@@ -286,16 +285,37 @@ exports.logout = catchAssyncErrors(function _callee5(req, res, next) {
 }); // register Doctor => register/doctor 
 
 exports.registerDoctor = catchAssyncErrors(function _callee6(req, res) {
-  var _req$body5, Id_Doctor, name, surname, phone, speciality, description, soin, city, address, userName, email, password, avatar, role, user, doctor;
-
+  var userName, email, password, avatar, data, soins, i, role, user, doctor;
   return regeneratorRuntime.async(function _callee6$(_context6) {
     while (1) {
       switch (_context6.prev = _context6.next) {
         case 0:
-          _req$body5 = req.body, Id_Doctor = _req$body5.Id_Doctor, name = _req$body5.name, surname = _req$body5.surname, phone = _req$body5.phone, speciality = _req$body5.speciality, description = _req$body5.description, soin = _req$body5.soin, city = _req$body5.city, address = _req$body5.address;
+          console.log("the request parsed inbody ", req.body);
+          console.log("the data is", req.body);
           userName = storedRegister.userName, email = storedRegister.email, password = storedRegister.password, avatar = storedRegister.avatar;
+          data = {
+            Id_Doctor: req.body['doctorData[Id_Doctor]'],
+            name: req.body['doctorData[name]'],
+            surname: req.body['doctorData[surname]'],
+            phone: req.body['doctorData[phone]'],
+            speciality: req.body['doctorData[speciality]'],
+            description: req.body['doctorData[description]'],
+            image: [avatar],
+            city: req.body['doctorData[city]'],
+            address: req.body['doctorData[address]']
+          };
+          soins = [];
+          i = 0;
+
+          for (key in req.body) {
+            if (key.includes("soins")) {
+              soins.push(req.body["doctorData[soins][".concat(i, "]")]);
+              i++;
+            }
+          }
+
           role = 'Doctor';
-          _context6.next = 5;
+          _context6.next = 10;
           return regeneratorRuntime.awrap(User.create({
             userName: userName,
             email: email,
@@ -310,22 +330,13 @@ exports.registerDoctor = catchAssyncErrors(function _callee6(req, res) {
             });
           }));
 
-        case 5:
+        case 10:
           user = _context6.sent;
-          _context6.next = 8;
-          return regeneratorRuntime.awrap(Doctor.create({
-            Id_Doctor: Id_Doctor,
-            name: name,
-            surname: surname,
+          _context6.next = 13;
+          return regeneratorRuntime.awrap(Doctor.create(_objectSpread({}, data, {
             email: email,
-            city: city,
-            address: address,
-            phone: phone,
-            speciality: speciality,
-            description: description,
-            soin: soin,
-            avatar: avatar
-          })["catch"](function (err) {
+            soins: soins
+          }))["catch"](function (err) {
             console.log(err);
             res.status(400).json({
               success: false,
@@ -333,11 +344,11 @@ exports.registerDoctor = catchAssyncErrors(function _callee6(req, res) {
             });
           }));
 
-        case 8:
+        case 13:
           doctor = _context6.sent;
-          sendToken(user, 201, res);
+          sendDoctorToken(user, doctor, 200, res);
 
-        case 10:
+        case 15:
         case "end":
           return _context6.stop();
       }
@@ -346,13 +357,13 @@ exports.registerDoctor = catchAssyncErrors(function _callee6(req, res) {
 }); //Loigin user =>/login
 
 exports.loginUser = catchAssyncErrors(function _callee7(req, res, next) {
-  var _req$body6, email, password, user, isPasswordMatched;
+  var _req$body5, email, password, user, isPasswordMatched;
 
   return regeneratorRuntime.async(function _callee7$(_context7) {
     while (1) {
       switch (_context7.prev = _context7.next) {
         case 0:
-          _req$body6 = req.body, email = _req$body6.email, password = _req$body6.password; // check if email is entred by user 
+          _req$body5 = req.body, email = _req$body5.email, password = _req$body5.password; // check if email is entred by user 
 
           if (!(!email || !password)) {
             _context7.next = 3;
@@ -408,20 +419,17 @@ exports.getUserProfile = catchAssyncErrors(function _callee8(req, res, next) {
     while (1) {
       switch (_context8.prev = _context8.next) {
         case 0:
-          console.log("get user id ", req); // if condition search which user is Logged in 
-
-          console.log("search user id ", req.user);
-          _context8.next = 4;
+          _context8.next = 2;
           return regeneratorRuntime.awrap(User.findById(req.user.id));
 
-        case 4:
+        case 2:
           user = _context8.sent;
           res.status(200).json({
             succcess: true,
-            userlogin: userlogin
+            user: user
           });
 
-        case 6:
+        case 4:
         case "end":
           return _context8.stop();
       }
@@ -461,7 +469,7 @@ exports.forgotPassword = catchAssyncErrors(function _callee9(req, res, next) {
         case 8:
           // Create reset password url
           //check the protocol http or https
-          resetUrl = "".concat(req.protocol, "://").concat(req.get('host'), "/password/reset/").concat(resetToken);
+          resetUrl = "".concat(req.protocol, "://").concat(req.hostname, ":3000/password/reset/").concat(resetToken);
           message = "Your password reset token is as follow:\n\n".concat(resetUrl, "\n\nIf you have not requested this email, then ignore it.");
           _context9.prev = 10;
           _context9.next = 13;

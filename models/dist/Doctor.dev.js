@@ -28,16 +28,15 @@ var doctorSchema = new mongoose.Schema({
     required: [true, 'Entrez votre adresse']
   },
   phone: {
-    type: Number,
-    required: [true, 'Entrez le numéro sur lequel vous êtes joignable'],
-    valiadte: [validator.Number, 'Entrez une forme numerique exacte']
+    type: String,
+    required: [true, 'Entrez le numéro sur lequel vous êtes joignable']
   },
   speciality: {
     type: String,
     required: [true, 'champ obligatoire']
   },
   description: {
-    type: [String],
+    type: String,
     required: [true, 'champ obligatoire']
   },
   soins: {
@@ -51,13 +50,10 @@ var doctorSchema = new mongoose.Schema({
   },
   image: [{
     public_id: {
-      type: String,
-      required: [true, "Eneter public id"]
+      type: String
     },
     url: {
-      type: String,
-      required: [true, "Entrer url"],
-      "default": '../assets/default.jpg'
+      type: String
     }
   }],
   ratings: {

@@ -1,40 +1,35 @@
 const { toLength } = require("lodash");
 
 class APIFeatures {
+
     constructor(query, queryStr) {
-        this.query = query;
-        this.queryStr = queryStr;
+       this.query = query;
+       this.queryStr = queryStr;
     }
-    
+     
     search() {
-        const keyword = this.queryStr.keyword ? {
-            name: {
-                $regex: this.queryStr.keyword,
-                $options: 'i'
+        console.log("entred in search")
+    
+        const keyword = this.queryStr.nameDoctor!='' ? {
+            
+            surname: {
+                $regex: new RegExp(this.queryStr.nameDoctor, 'i')
             },
-            // surname: {
-            //     $regex: this.queryStr.keyword,
-            //     $options: 'i'
-            // }
+            city :{
+                $regex: new RegExp(this.queryStr.city, 'i'),
+            },
+            speciality:{
+                $regex:new RegExp(this.queryStr.speciality, 'i')
+              
+            }
 
         } : {}
-        console.log("Search process started"); 
-        this.query = this.query.find({...keyword}); 
-        console.log("Search process finished"); 
+      
+        this.query = this.query.find(keyword); 
+    
         return this;
       
     }
-     //filter by speciality 
-filter()
-{
-    const queryCopy ={ ...this.queryStr}; 
-
-     //removing fields from the query 
-     const removeFields = ['keyword','limit', 'page']
-     removeFields.forEach(el => delete queryCopy[el]); 
-     console.log('Speciality filtring',queryCopy);
-
-}
 
 
  
@@ -44,8 +39,9 @@ pagination(resPerPage){
     const skip= resPerPage *(currentPage - 1); 
     //limit: function to limit the number of products per page 
     this.query = this.query.limit(resPerPage).skip(skip); 
-    return this; 
     console.log("paginatione made");
+    return this; 
+    
 }
 }
 module.exports= APIFeatures; 

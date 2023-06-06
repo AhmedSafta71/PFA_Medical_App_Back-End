@@ -23,6 +23,10 @@ var patientSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Entrez le poids ']
   },
+  city: {
+    type: String,
+    required: [true, 'Entrez la ville']
+  },
   gender: {
     type: String,
     required: [true, 'champ obligatoire']

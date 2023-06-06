@@ -1,15 +1,14 @@
 const User=require('../models/User');
 const Doctor= require('../models/Doctor');
 const Patient= require('../models/Patient');
-
-
 const catchAssyncErrors = require('../middlewares/catchAssyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
-const sendToken = require('../utils/jwtToken');
+const {sendToken,sendDoctorToken} = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
 const cloudinary = require('cloudinary');
 const path = require('path');
-const crypto= require('crypto')
+const crypto= require('crypto');
+const { removeListener } = require('../models/User');
 
 
 // Local storage data for register
@@ -96,16 +95,14 @@ console.log("entred");
         success: true,
         user:storedRegister
     })
-    console.log("success!!")
+  
 })
 
 
 // registerPatient => register/patient
 
 exports.registerPatient = catchAssyncErrors(async (req, res) => {
-
-    console.log("the request body", req.body); 
-    
+     console.log("registerPatient request arrived ");
     let {
         name,
         surname, 
@@ -115,24 +112,13 @@ exports.registerPatient = catchAssyncErrors(async (req, res) => {
         smoker,
         height, 
         weight,
-        disease, 
-        operation,
     } = req.body;
-    console.log("StoredRegister data  ", storedRegister); 
+    console.log("StoredRegister data", storedRegister); 
     const {userName, email, password, avatar}= storedRegister;
-    
+    let disease=req.body['disease[]']; 
+    let operation=req.body['operation[]']; 
     const role= 'Patient';
-
-    console.log("Data sent to patient ",{ name,surname, 
-    city,
-    gender,  
-    age, 
-    smoker,
-    height, 
-    weight,
-    disease, 
-    operation,
-    email} ); 
+    
     const patient= await Patient.create({
         name,
         surname, 
@@ -164,12 +150,10 @@ exports.registerPatient = catchAssyncErrors(async (req, res) => {
         res.status(400).json({
             success: false,
             message: 'user Already created'
-
         });
     })
-   
     sendToken(user,201,res);
-})
+});
 
 //Loigin user =>/login
 exports.loginUser = catchAssyncErrors(async (req, res, next) => {
@@ -198,6 +182,7 @@ if (!isPasswordMatched) {
 }
 sendToken(user, 200, res);
 
+
 });
 
 //logout user => /logOut
@@ -215,27 +200,38 @@ exports.logout = catchAssyncErrors(async (req, res, next) => {
 
 // register Doctor => register/doctor 
 exports.registerDoctor = catchAssyncErrors(async (req, res) => {
-    let {
-        Id_Doctor,
-        name,
-        surname, 
-        phone,  
-        speciality, 
-        description,
-        soin, 
-        city,
-        address, 
-    } = req.body;
     
+    console.log("the request parsed inbody ",req.body); 
+    console.log("the data is",req.body );
     const {userName, email, password, avatar}= storedRegister;
-    const role= 'Doctor';
+    let  data= {
+        Id_Doctor:req.body['doctorData[Id_Doctor]'],
+        name:req.body['doctorData[name]'], 
+        surname: req.body['doctorData[surname]'],
+        phone:req.body['doctorData[phone]'],
+        speciality:req.body['doctorData[speciality]'],
+        description:req.body['doctorData[description]'],
+        image:[avatar],
+        city:req.body['doctorData[city]'],
+        address:req.body['doctorData[address]'], 
+         
+    } ;
+let  soins=[];
+let i=0;
+    for( key in req.body){ 
+    if( key.includes("soins")){ 
+        soins.push(req.body[`doctorData[soins][${i}]`]); 
+        i++; }
+    }
+ 
+    const role= 'Doctor'; 
         
     const user = await User.create({
-        userName,
-        email,
-        password,
-        avatar, 
-        role
+        userName:userName,
+        email:email,
+        password:password,
+        avatar:avatar, 
+        role:role
         
     }).catch(err => {
         console.log(err);
@@ -244,19 +240,9 @@ exports.registerDoctor = catchAssyncErrors(async (req, res) => {
             message: 'user Already created'
         });
     })
-    
+
     const doctor= await Doctor.create({
-        Id_Doctor,
-        name,
-        surname,
-        email, 
-        city,
-        address,
-        phone,  
-        speciality, 
-        description,
-        soin,
-        avatar
+       ...data,email:email, soins:soins
         
     }).catch(err => {
         console.log(err);
@@ -266,7 +252,9 @@ exports.registerDoctor = catchAssyncErrors(async (req, res) => {
         });
     })
 
-    sendToken(user, 201, res);
+    sendDoctorToken(user,doctor,200,res)
+    
+    
 })
 
 //Loigin user =>/login
@@ -300,14 +288,12 @@ sendToken(user, 200, res);
 
 //Get currently logged in user details  =>/me
 exports.getUserProfile = catchAssyncErrors(async (req, res, next) => {
-    console.log("get user id ", req); 
-    // if condition search which user is Logged in 
-    console.log("search user id ", req.user); 
     const user = await User.findById(req.user.id);
     res.status(200).json({
         succcess: true,
-        userlogin
+        user
     })
+    
 })
 //Forgot Password => /pasword/forgot
 exports.forgotPassword = catchAssyncErrors(async (req, res, next) => {
@@ -328,7 +314,7 @@ exports.forgotPassword = catchAssyncErrors(async (req, res, next) => {
 
     // Create reset password url
     //check the protocol http or https
-    const resetUrl = `${req.protocol}://${req.get('host')}/password/reset/${resetToken}`;
+    const resetUrl = `${req.protocol}://${req.hostname}:3000/password/reset/${resetToken}`;
     const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`
 
     try {

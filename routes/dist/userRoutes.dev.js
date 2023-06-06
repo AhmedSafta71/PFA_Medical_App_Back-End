@@ -2,17 +2,19 @@
 
 var express = require('express');
 
+var passport = require('passport');
+
 var router = express.Router();
+var CLIENT_HOME_PAGE_URL = "https://localhost:3000";
 
 var _require = require('../controllers/userController'),
     loginUser = _require.loginUser,
+    forgotPassword = _require.forgotPassword,
     registerAdmin = _require.registerAdmin,
     registerDoctor = _require.registerDoctor,
     captureUser = _require.captureUser,
-    registerPatient = _require.registerPatient,
     logout = _require.logout,
     getUserProfile = _require.getUserProfile,
-    forgotPassword = _require.forgotPassword,
     updatePassword = _require.updatePassword,
     resetPassword = _require.resetPassword,
     updateProfile = _require.updateProfile,
@@ -27,10 +29,17 @@ var _require2 = require('../middlewares/auth'),
     authorizeRoles = _require2.authorizeRoles;
 
 router.route('/login').post(loginUser);
+router.route('/auth/google').get(passport.authenticate('google', {
+  scope: ['email', 'Profile', 'userName']
+}));
+router.route('/auth/google/callback').get(passport.authenticate('google', {
+  failureRedirect: '/login',
+  successRedirect: CLIENT_HOME_PAGE_URL,
+  session: false
+}));
 router.route('/register/admin').post(registerAdmin);
 router.route('/register').post(captureUser);
 router.route('/register/doctor').post(registerDoctor);
-router.route('/register/patient').post(registerPatient);
 router.route('/logout').get(logout);
 router.route('/me').get(isAuthenticatedUser, getUserProfile);
 router.route('/password/forgot').post(forgotPassword);

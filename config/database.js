@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 // const dotenv=require('dotenv'); 
 // const path = require('path');
 // dotenv.config({path: '.env'}); 
-const DB_URI=''
+const DB_URI='mongodb+srv://zonix:ZonixAhmed159@cluster0.z9w90dk.mongodb.net/?retryWrites=true&w=majority'
 const connectDatabase = () => {
     mongoose.connect(DB_URI, {
         useNewUrlParser: true,

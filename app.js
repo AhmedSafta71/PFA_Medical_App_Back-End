@@ -1,11 +1,29 @@
 const express =require('express'); 
+const helmet =require('helmet'); 
+ const dotenv=require('dotenv')
+const passport = require('passport');
+const {Strategy} =require('passport-google-oauth20'); 
+
 const https =require('https'); 
 const fs = require('fs');
 const fileUpload = require('express-fileupload'); 
 const path =require('path'); 
+dotenv.config({path: '.env'}); 
 //create an express app 
 const app =express(); 
-const dotenv =require('dotenv'); 
+
+AUTH_OPTIONS={
+    callbackURL:'/auth/google/callback', 
+    clientID: process.env.CLIENT_ID, 
+    clientSecret: process.env.CLIENT_SECRET, 
+}
+function verifyCallback(accessToken, refreshToken,profile,done){
+    console.log('Google profile ',profile )
+    done(null, profile); 
+}
+passport.use(new Strategy(AUTH_OPTIONS,verifyCallback ))
+app.use(helmet()); 
+app.use(passport.initialize()); 
 const errorMiddelware= require('./middlewares/errors');
 const connectDatabase = require('./config/database');
 const cookieParser= require('cookie-parser');
@@ -13,8 +31,10 @@ const bodyParser= require('body-parser')
 const cloudinary = require('cloudinary');
 const doctors = require('./routes/doctorsRoutes');
 const users=require('./routes/userRoutes')
+const patients= require('./routes/patientRoutes'); 
+const questions=require('./routes/questionRoutes');
+const payments=require('./routes/payementRoute');
 // handle uncaught exceptions 
-dotenv.config({path: '.env'});
 process.on('uncaughtException', err =>{
     console.log(`error: ${err.stack}` ); 
     console.log("shutting down due to uncaught exceptions "); 
@@ -38,6 +58,9 @@ app.use(fileUpload({useTempFiles: true}));
 try {
     app.use('', doctors);
     app.use('', users);
+    app.use('',patients); 
+    app.use('',questions);
+    app.use('',payments);
 
 }
 catch (error){

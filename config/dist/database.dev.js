@@ -5,7 +5,7 @@ var mongoose = require('mongoose'); // const dotenv=require('dotenv');
 // dotenv.config({path: '.env'}); 
 
 
-var DB_URI = '';
+var DB_URI = 'mongodb+srv://zonix:ZonixAhmed159@cluster0.z9w90dk.mongodb.net/?retryWrites=true&w=majority';
 
 var connectDatabase = function connectDatabase() {
   mongoose.connect(DB_URI, {

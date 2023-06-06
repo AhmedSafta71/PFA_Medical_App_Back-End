@@ -4,7 +4,7 @@ var ErrorHandler = require("../utils/errorHandler");
 
 var catchAssyncErrors = require("./catchAssyncErrors");
 
-var jwt = require("jsonWebtoken");
+var jwt = require("jsonwebtoken");
 
 var Patient = require("../models/Patient");
 
