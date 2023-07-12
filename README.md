@@ -30,9 +30,8 @@ Replace <your_...> with the appropriate values for your environment.
 # Usage
 To run the project in development mode, use the following command:
 
-
 npm run start
 This will start the API server, and you can make requests to the defined endpoints.
 
-Contributing
+# Contributing
 Contributions to the project are welcome. If you encounter any issues or have suggestions for improvement, please create an issue or submit a pull request.
